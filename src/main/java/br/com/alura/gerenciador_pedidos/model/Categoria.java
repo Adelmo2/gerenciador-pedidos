@@ -1,17 +1,24 @@
 package br.com.alura.gerenciador_pedidos.model;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 import java.util.List;
 
 @Entity
 public class Categoria {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Produto> produtos;
+
+    //@Autowired
+    public Categoria() {}
 
     public void setId(Long id) {
         this.id = id;
@@ -39,7 +46,7 @@ public class Categoria {
     }
 
     public void setProdutos(List<Produto> produtos) {
-        //produtos.forEach(p -> p.setCategoria(this));
+        produtos.forEach(p -> p.setCategoria(this));
         this.produtos = produtos;
     }
 

@@ -1,44 +1,3 @@
-//package br.com.alura.gerenciador_pedidos.principal;
-//
-//import br.com.alura.gerenciador_pedidos.model.Categoria;
-//import br.com.alura.gerenciador_pedidos.model.Pedido;
-//import br.com.alura.gerenciador_pedidos.model.Produto;
-//import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
-//import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
-//import br.com.alura.gerenciador_pedidos.repository.ProdutosRepository;
-//
-//import java.time.LocalDate;
-//
-//public class Principal {
-//    private ProdutosRepository produtosRepository;
-//    private PedidoRepository pedidoRepository;
-//    private CategoriaRepository categoriaRepository;
-//
-//    public Principal(PedidoRepository pedidoRepository, ProdutosRepository produtosRepository, CategoriaRepository categoriaRepository) {
-//        this.pedidoRepository = pedidoRepository;
-//        this.produtosRepository = produtosRepository;
-//        this.categoriaRepository = categoriaRepository;
-//    }
-//
-//    public void salvaTabelas() {
-//        System.out.println("Executado a propriedade mostra");
-//
-//        Produto produto = new Produto("Produto 2", 80.0);
-//
-//        Categoria categoria = new Categoria(2L,"Categoria 2");
-//
-//        Pedido pedido = new Pedido(2L, LocalDate.now());
-//
-//        produtosRepository.save(produto);
-//        categoriaRepository.save(categoria);
-//        pedidoRepository.save(pedido);
-//
-//        System.out.println(produto);
-//        System.out.println(categoria);
-//        System.out.println(pedido);
-//    }
-//}
-//
 
 package br.com.alura.gerenciador_pedidos.principal;
 
@@ -46,12 +5,12 @@ import br.com.alura.gerenciador_pedidos.model.Categoria;
 import br.com.alura.gerenciador_pedidos.model.Produto;
 import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+//@Component
 public class Principal {
 
     @Autowired
@@ -60,14 +19,25 @@ public class Principal {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    //@Autowired
+    public Principal() {
+    }
+
+    public ProdutoRepository getProdutoRepository() {
+        return produtoRepository;
+    }
+    public void setProdutoRepository(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
+    }
+
     public CategoriaRepository getCategoriaRepository() {
         return categoriaRepository;
     }
-
     public void setCategoriaRepository(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
 
+    @Transactional
     public void principal() {
         // Criando categorias
         Categoria categoriaEletronicos = new Categoria(1L, "Eletrônicos");
@@ -96,16 +66,12 @@ public class Principal {
             );
         });
 
-
 //        // Testando consultas e verificando os relacionamentos
-//        System.out.println("Produtos na categoria Eletrônicos:");
-//        categoriaRepository.findById(1L).ifPresent(categoria ->
-//                categoria.getProdutos().forEach(produto ->
-//                        System.out.println(" - " + produto.getNome())
-//                )
-//        );
-
-
-
+        System.out.println("Produtos na categoria Eletrônicos:");
+        categoriaRepository.findById(1L).ifPresent(categoria ->
+                categoria.getProdutos().forEach(produto ->
+                        System.out.println(" - " + produto.getNome())
+                )
+        );
     }
 }

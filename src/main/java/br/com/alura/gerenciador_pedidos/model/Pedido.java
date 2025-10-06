@@ -13,6 +13,9 @@ public class Pedido {
 
     private LocalDate data;
 
+    //@Autowired
+    public Pedido() {}
+
     public Pedido(Long id, LocalDate data) {
         this.id = id;
         this.data = data;
@@ -25,8 +28,6 @@ public class Pedido {
     public LocalDate getData() {
         return data;
     }
-
-    public Pedido(){}
 
     @Override
     public String toString() {

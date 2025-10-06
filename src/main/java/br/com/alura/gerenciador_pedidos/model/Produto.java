@@ -15,6 +15,9 @@ public class Produto {
     private String nome;
     private Double preco;
 
+    //@Autowired
+    public Produto() {}
+
     public Long getId() {
         return id;
     }
