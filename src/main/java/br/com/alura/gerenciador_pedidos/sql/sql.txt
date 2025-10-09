@@ -1,0 +1,12 @@
+select * from categoria
+select * from fornecedor
+select * from pedido
+select * from pedido_produto
+select * from produto
+
+
+drop table  pedido_produto;
+drop table  produto;
+drop table  categoria;
+drop table  fornecedor;
+drop table  pedido;

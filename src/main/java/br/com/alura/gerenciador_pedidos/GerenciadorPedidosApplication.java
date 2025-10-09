@@ -1,10 +1,6 @@
 package br.com.alura.gerenciador_pedidos;
 
 import br.com.alura.gerenciador_pedidos.principal.Principal;
-import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
-import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
-import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,14 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GerenciadorPedidosApplication implements CommandLineRunner {
 
-    @Autowired
-    private ProdutoRepository produtosRepository;
+    private final Principal principal;
 
-    @Autowired
-    private PedidoRepository pedidoRepository;
-
-    //@Autowired
-    //private CategoriaRepository categoriaRepository;
+    public GerenciadorPedidosApplication(Principal principal) {
+        this.principal = principal;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(GerenciadorPedidosApplication.class, args);
@@ -27,11 +20,7 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //Principal principal = new Principal(pedidoRepository, produtosRepository, categoriaRepository);
-        //principal.salvaTabelas();
-
-        Principal principal = new Principal();
+        //Principal principal = new Principal();
         principal.principal();
-
     }
 }
