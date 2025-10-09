@@ -1,44 +1,3 @@
-//package br.com.alura.gerenciador_pedidos.principal;
-//
-//import br.com.alura.gerenciador_pedidos.model.Categoria;
-//import br.com.alura.gerenciador_pedidos.model.Pedido;
-//import br.com.alura.gerenciador_pedidos.model.Produto;
-//import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
-//import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
-//import br.com.alura.gerenciador_pedidos.repository.ProdutosRepository;
-//
-//import java.time.LocalDate;
-//
-//public class Principal {
-//    private ProdutosRepository produtosRepository;
-//    private PedidoRepository pedidoRepository;
-//    private CategoriaRepository categoriaRepository;
-//
-//    public Principal(PedidoRepository pedidoRepository, ProdutosRepository produtosRepository, CategoriaRepository categoriaRepository) {
-//        this.pedidoRepository = pedidoRepository;
-//        this.produtosRepository = produtosRepository;
-//        this.categoriaRepository = categoriaRepository;
-//    }
-//
-//    public void salvaTabelas() {
-//        System.out.println("Executado a propriedade mostra");
-//
-//        Produto produto = new Produto("Produto 2", 80.0);
-//
-//        Categoria categoria = new Categoria(2L,"Categoria 2");
-//
-//        Pedido pedido = new Pedido(2L, LocalDate.now());
-//
-//        produtosRepository.save(produto);
-//        categoriaRepository.save(categoria);
-//        pedidoRepository.save(pedido);
-//
-//        System.out.println(produto);
-//        System.out.println(categoria);
-//        System.out.println(pedido);
-//    }
-//}
-//
 
 //Um exemplo da mesma falha do categoriaRepository null
 //https://cursos.alura.com.br/forum/topico-duvida-excecao-nullpointerexception-categoryrepository-saveall-java-lang-iterable-515255
@@ -55,12 +14,11 @@ import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+//@Component
 public class Principal {
 
     @Autowired
@@ -69,16 +27,20 @@ public class Principal {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+<<<<<<< HEAD
     @Autowired
     private PedidoRepository pedidoRepository;
 
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+=======
+>>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
     //@Autowired
     public Principal() {
     }
 
+<<<<<<< HEAD
     public FornecedorRepository getFornecedorRepository() {
         return fornecedorRepository;
     }
@@ -86,6 +48,8 @@ public class Principal {
         this.fornecedorRepository = fornecedorRepository;
     }
 
+=======
+>>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
     public ProdutoRepository getProdutoRepository() {
         return produtoRepository;
     }
@@ -100,6 +64,7 @@ public class Principal {
         this.categoriaRepository = categoriaRepository;
     }
 
+<<<<<<< HEAD
     public PedidoRepository getPedidoRepository() {
         return pedidoRepository;
     }
@@ -107,6 +72,8 @@ public class Principal {
         this.pedidoRepository = pedidoRepository;
     }
 
+=======
+>>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
     @Transactional
     public void principal() {
         // Criando categorias
@@ -150,6 +117,7 @@ public class Principal {
 //        categoriaRepository.saveAll(List.of(categoriaEletronicos, categoriaLivros));
 
         // Testando a persistência e o relacionamento
+<<<<<<< HEAD
 //        System.out.println("Categorias e seus produtos:");
 //        categoriaRepository.findAll().forEach(categoria -> {
 //            System.out.println("Categoria: " + categoria.getNome());
@@ -165,5 +133,22 @@ public class Principal {
 //                        System.out.println(" - " + produto.getNome())
 //                )
 //        );
+=======
+        System.out.println("Categorias e seus produtos:");
+        categoriaRepository.findAll().forEach(categoria -> {
+            System.out.println("Categoria: " + categoria.getNome());
+            categoria.getProdutos().forEach(produto ->
+                    System.out.println(" - Produto: " + produto.getNome())
+            );
+        });
+
+//        // Testando consultas e verificando os relacionamentos
+        System.out.println("Produtos na categoria Eletrônicos:");
+        categoriaRepository.findById(1L).ifPresent(categoria ->
+                categoria.getProdutos().forEach(produto ->
+                        System.out.println(" - " + produto.getNome())
+                )
+        );
+>>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
     }
 }

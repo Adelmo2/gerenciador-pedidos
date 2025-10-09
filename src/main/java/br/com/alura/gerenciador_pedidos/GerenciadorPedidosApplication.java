@@ -20,7 +20,11 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+<<<<<<< HEAD
         //Principal principal = new Principal();
+=======
+        Principal principal = new Principal();
+>>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
         principal.principal();
     }
 }
