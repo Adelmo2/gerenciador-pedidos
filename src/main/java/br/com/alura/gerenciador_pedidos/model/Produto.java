@@ -21,9 +21,6 @@ public class Produto {
 
     public Produto() {}
 
-    //@Autowired
-    public Produto() {}
-
     public Long getId() {
         return id;
     }
