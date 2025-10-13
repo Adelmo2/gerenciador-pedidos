@@ -25,7 +25,11 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //Principal principal = new Principal(); //nao estanciar quando estiver utilizando o jpa
+<<<<<<< HEAD
         //principal.principal();
         principal2.CadastrarForncedor();
+=======
+        principal.principal();
+>>>>>>> 7828a0b8283941bca7f6c39be7d3759c39ba63d8
     }
 }

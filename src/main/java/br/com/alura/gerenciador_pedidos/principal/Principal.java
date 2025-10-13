@@ -141,6 +141,7 @@ public class Principal {
         pedido2.setProdutos(List.of(produto2));
         pedidoRepository.saveAll(List.of(pedido1, pedido2));
 
+<<<<<<< HEAD
         // Testando consultas e verificando os relacionamentos
         System.out.println("\n********---> Produtos na categoria Eletrônicos:");
         categoriaRepository.findById(1L).ifPresent(categoria ->
@@ -165,5 +166,48 @@ public class Principal {
 
         System.out.println("\n");
 
+=======
+        // Associando produtos às categorias
+        //categoriaEletronicos.
+//        categoriaEletronicos.setProdutos(List.of(produto1, produto2));
+//        categoriaLivros.setProdutos(List.of(produto3, produto4));
+
+        // Salvando categorias (cascateia produtos automaticamente, se configurado)
+//        categoriaRepository.saveAll(List.of(categoriaEletronicos, categoriaLivros));
+
+        // Testando a persistência e o relacionamento
+
+//        System.out.println("Categorias e seus produtos:");
+//        categoriaRepository.findAll().forEach(categoria -> {
+//            System.out.println("Categoria: " + categoria.getNome());
+//            categoria.getProdutos().forEach(produto ->
+//                    System.out.println(" - Produto: " + produto.getNome())
+//            );
+//        });
+
+//        // Testando consultas e verificando os relacionamentos
+//        System.out.println("Produtos na categoria Eletrônicos:");
+//        categoriaRepository.findById(1L).ifPresent(categoria ->
+//                categoria.getProdutos().forEach(produto ->
+//                        System.out.println(" - " + produto.getNome())
+//                )
+//        );
+
+//        System.out.println("Categorias e seus produtos:");
+//        categoriaRepository.findAll().forEach(categoria -> {
+//            System.out.println("Categoria: " + categoria.getNome());
+//            categoria.getProdutos().forEach(produto ->
+//                    System.out.println(" - Produto: " + produto.getNome())
+//            );
+//        });
+
+//        // Testando consultas e verificando os relacionamentos
+//        System.out.println("Produtos na categoria Eletrônicos:");
+//        categoriaRepository.findById(1L).ifPresent(categoria ->
+//                categoria.getProdutos().forEach(produto ->
+//                        System.out.println(" - " + produto.getNome())
+//                )
+//        );
+>>>>>>> 7828a0b8283941bca7f6c39be7d3759c39ba63d8
     }
 }
