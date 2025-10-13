@@ -21,9 +21,6 @@ public class Produto {
 
     public Produto() {}
 
-    //@Autowired
-    public Produto() {}
-
     public Long getId() {
         return id;
     }
@@ -65,4 +62,13 @@ public class Produto {
         this.categoria = categoria;
         this.fornecedor = fornecedor;
     }
+
+//    public Produto(String nome, Double preco, Long id_categoria, Long id_fornecedor) {
+//        this.nome = nome;
+//        this.preco = preco;
+//        //this.categoria = categoria;
+//       // this.fornecedor = fornecedor;
+//        this.categoria.setId(id_categoria);
+//        this.fornecedor.setId(id_fornecedor);
+//    }
 }

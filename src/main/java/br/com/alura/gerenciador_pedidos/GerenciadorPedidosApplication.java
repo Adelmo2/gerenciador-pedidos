@@ -1,6 +1,7 @@
 package br.com.alura.gerenciador_pedidos;
 
 import br.com.alura.gerenciador_pedidos.principal.Principal;
+import br.com.alura.gerenciador_pedidos.principal.Principal2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +11,11 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
 
     private final Principal principal;
 
-    public GerenciadorPedidosApplication(Principal principal) {
+    private final Principal2 principal2;
+
+    public GerenciadorPedidosApplication(Principal principal, Principal2 principal2) {
         this.principal = principal;
+        this.principal2 = principal2;
     }
 
     public static void main(String[] args) {
@@ -20,11 +24,8 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-<<<<<<< HEAD
-        //Principal principal = new Principal();
-=======
-        Principal principal = new Principal();
->>>>>>> 471832b5b0a54825ec7f94b5575f998a840f55d1
-        principal.principal();
+        //Principal principal = new Principal(); //nao estanciar quando estiver utilizando o jpa
+        //principal.principal();
+        principal2.CadastrarForncedor();
     }
 }
