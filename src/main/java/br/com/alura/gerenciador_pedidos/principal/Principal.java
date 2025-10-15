@@ -141,7 +141,6 @@ public class Principal {
         pedido2.setProdutos(List.of(produto2));
         pedidoRepository.saveAll(List.of(pedido1, pedido2));
 
-<<<<<<< HEAD
         // Testando consultas e verificando os relacionamentos
         System.out.println("\n********---> Produtos na categoria Eletrônicos:");
         categoriaRepository.findById(1L).ifPresent(categoria ->
@@ -166,7 +165,6 @@ public class Principal {
 
         System.out.println("\n");
 
-=======
         // Associando produtos às categorias
         //categoriaEletronicos.
 //        categoriaEletronicos.setProdutos(List.of(produto1, produto2));
@@ -208,6 +206,5 @@ public class Principal {
 //                        System.out.println(" - " + produto.getNome())
 //                )
 //        );
->>>>>>> 7828a0b8283941bca7f6c39be7d3759c39ba63d8
     }
 }

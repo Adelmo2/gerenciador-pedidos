@@ -60,6 +60,7 @@ public class Principal2 {
             2 - Cadastrar Catagoria
             3 - Cadastrar Produto
             4 - Consultar ID do Fornecedor
+            5 - Consultar Pedido
             """;
 
             System.out.println(menu);
@@ -75,10 +76,14 @@ public class Principal2 {
                     break;
                 case 3:
                     cadastrarProduto();
+                    opcao = 0;
                     break;
                 case 4:
                     consultarIdfornecedor();
                     break;
+                case 5:
+                    cadastrarPedido();
+                    break;                    
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -88,9 +93,21 @@ public class Principal2 {
         }
     }
 
+    private void cadastrarPedido() {
+    }
+
     private void cadastrarFornecedor() {
         System.out.println("Informa o nome do fornecedor:");
         var nomefornecedor = leitura.nextLine();
+
+        Optional<Fornecedor> fornecedorConsultado = fornecedorRepository.findByNomeContainingIgnoreCase(nomefornecedor);
+        if (fornecedorConsultado.isPresent()) {
+            var nomeFornecedor = fornecedorConsultado.get().getNome();
+            var idFornecedor = fornecedorConsultado.get().getId();
+            System.out.println("\nFornecedor: " + nomeFornecedor + " - " + idFornecedor + " já cadastrado!");
+            System.out.println("\n");
+            return;
+        }
 
         Fornecedor fornecedor = new Fornecedor(nomefornecedor);
         fornecedorRepository.saveAll(List.of(fornecedor));
@@ -105,6 +122,16 @@ public class Principal2 {
         System.out.println("Informa o nome da categoria:");
         var nomecategoria = leitura.nextLine();
         Categoria categoria = new Categoria(nomecategoria);
+
+        Optional<Categoria> categoriaConsultada = categoriaRepository.findByNomeContainingIgnoreCase(nomecategoria);
+        if (categoriaConsultada.isPresent()) {
+            var nomeCategoria = categoriaConsultada.get().getNome();
+            var idCategoria = categoriaConsultada.get().getId();
+            System.out.println("\nCategoria: " + nomeCategoria + " - " + idCategoria + " já cadastrada!");
+            System.out.println("\n");
+            return;
+        }
+
         categoriaRepository.saveAll(List.of(categoria));
 
         System.out.println("\n******---> Catergorias Cadastradas:");
@@ -113,23 +140,15 @@ public class Principal2 {
         });
     }
 
-    private void cadastrarProduto() {
-        Categoria categoria = new Categoria();
-        categoria.setId(7L);
-        Fornecedor fornecedor = new Fornecedor();
-        fornecedor.setId(7L);
-        Produto produto = new Produto("Memoria", 300.00, categoria, fornecedor);
-        produtoRepository.saveAll(List.of(produto));
-    }
-
     private void consultarIdfornecedor() {
         System.out.println("Informa o nome do fornecedor:");
         var nomefornecedor = leitura.nextLine();
 
         Optional<Fornecedor> fornecedorConsultado = fornecedorRepository.findByNomeContainingIgnoreCase(nomefornecedor);
-
         if (fornecedorConsultado.isPresent()) {
-            System.out.println("Fornecedor: " + fornecedorConsultado.get().getNome());
+            var nomeFornecedor = fornecedorConsultado.get().getNome();
+            var idFornecedor = fornecedorConsultado.get().getId();
+            System.out.println("Fornecedor: " + nomeFornecedor + " ID: " + idFornecedor);
         } else {
             System.out.println("Fornecedor não encontrado!");
         }
@@ -140,6 +159,56 @@ public class Principal2 {
 //            //System.out.println(idForncedro);
 //            //System.out.println(fornecedorRepository.'');
 //        });
+    }
+
+    private void cadastrarProduto() {
+        System.out.println("Informa o nome do produto:");
+        var nomeProduto = leitura.nextLine();
+
+        System.out.println("Informa o valor do produto:");
+        var valorProduto = leitura.nextLine();
+
+        System.out.println("\n");
+        fornecedorRepository.findAll().forEach(f -> {
+            System.out.println("Fornecedor: " + f.getNome() + " ID: " + f.getId());
+        });
+
+        System.out.println("Informa o nome do fornecedor:");
+        var nomeFornecedor2 = leitura.nextLine();
+        Optional<Fornecedor> fornecedorConsultado2 = fornecedorRepository.findByNomeContainingIgnoreCase(nomeFornecedor2);
+        Long idFornecedor = null;
+        if (fornecedorConsultado2.isPresent()) {
+            idFornecedor = fornecedorConsultado2.get().getId();
+        } else {
+            System.out.println("\n*** Fornecedor não encontrado! Pressione qualquer tecla para sair...");
+            var sair = leitura.nextLine();
+            System.exit(0);
+        }
+
+        System.out.println("\n");
+        categoriaRepository.findAll().forEach(c -> {
+            System.out.println("Categoria: " + c.getNome() + " ID: " + c.getId());
+        });
+
+        System.out.println("Informa o nome da categoria:");
+        var nomeCategoria2 = leitura.nextLine();
+        Optional<Categoria> categoriaConsultada2 = categoriaRepository.findByNomeContainingIgnoreCase(nomeCategoria2);
+        Long idCategoria = null;
+        if (categoriaConsultada2.isPresent()) {
+            idCategoria = categoriaConsultada2.get().getId();
+        } else {
+            System.out.println("\n*** Categoria não encontrado! Pressione qualquer tecla para sair...");
+            var sair = leitura.nextLine();
+            System.exit(0);
+        }
+
+        Categoria categoria = new Categoria();
+        categoria.setId(idCategoria);
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(idFornecedor);
+        Produto produto = new Produto(nomeProduto, Double.valueOf(valorProduto), categoria, fornecedor);
+        produtoRepository.saveAll(List.of(produto));
+        //System.exit(0);
     }
 
 }
