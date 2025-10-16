@@ -2,14 +2,18 @@ package br.com.alura.gerenciador_pedidos.principal;
 
 import br.com.alura.gerenciador_pedidos.model.Categoria;
 import br.com.alura.gerenciador_pedidos.model.Fornecedor;
+import br.com.alura.gerenciador_pedidos.model.Pedido;
 import br.com.alura.gerenciador_pedidos.model.Produto;
 import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
 import br.com.alura.gerenciador_pedidos.repository.FornecedorRepository;
+import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
+import com.sun.jdi.IntegerValue;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -24,6 +28,9 @@ public class Principal2 {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     private Scanner leitura = new Scanner(System.in);
 
@@ -60,7 +67,8 @@ public class Principal2 {
             2 - Cadastrar Catagoria
             3 - Cadastrar Produto
             4 - Consultar ID do Fornecedor
-            5 - Consultar Pedido
+            5 - Cadastrar Pedido
+            6 - Consultar Pedidos
             """;
 
             System.out.println(menu);
@@ -83,7 +91,10 @@ public class Principal2 {
                     break;
                 case 5:
                     cadastrarPedido();
-                    break;                    
+                    break;
+                case 6:
+                    consultarPedidos();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -91,9 +102,6 @@ public class Principal2 {
                     System.out.println("Opção inválida");
             }
         }
-    }
-
-    private void cadastrarPedido() {
     }
 
     private void cadastrarFornecedor() {
@@ -141,24 +149,21 @@ public class Principal2 {
     }
 
     private void consultarIdfornecedor() {
-        System.out.println("Informa o nome do fornecedor:");
-        var nomefornecedor = leitura.nextLine();
+        Boolean saida = false;
+        while (!saida) {
+            System.out.println("Informa o nome do fornecedor:");
+            var nomefornecedor = leitura.nextLine();
 
-        Optional<Fornecedor> fornecedorConsultado = fornecedorRepository.findByNomeContainingIgnoreCase(nomefornecedor);
-        if (fornecedorConsultado.isPresent()) {
-            var nomeFornecedor = fornecedorConsultado.get().getNome();
-            var idFornecedor = fornecedorConsultado.get().getId();
-            System.out.println("Fornecedor: " + nomeFornecedor + " ID: " + idFornecedor);
-        } else {
-            System.out.println("Fornecedor não encontrado!");
+            Optional<Fornecedor> fornecedorConsultado = fornecedorRepository.findByNomeContainingIgnoreCase(nomefornecedor);
+            if (fornecedorConsultado.isPresent()) {
+                var nomeFornecedor = fornecedorConsultado.get().getNome();
+                var idFornecedor = fornecedorConsultado.get().getId();
+                System.out.println("Fornecedor: " + nomeFornecedor + " ID: " + idFornecedor);
+                saida = true;
+            } else {
+                System.out.println("Fornecedor não encontrado!");
+            }
         }
-//        fornecedorRepository.findAll().forEach(fornecedor -> {
-//            fornecedor.getNome().contains(nomefornecedor);
-//            //System.out.println(t);
-//            //var idForncedro = fornecedor.getId();
-//            //System.out.println(idForncedro);
-//            //System.out.println(fornecedorRepository.'');
-//        });
     }
 
     private void cadastrarProduto() {
@@ -197,7 +202,7 @@ public class Principal2 {
         if (categoriaConsultada2.isPresent()) {
             idCategoria = categoriaConsultada2.get().getId();
         } else {
-            System.out.println("\n*** Categoria não encontrado! Pressione qualquer tecla para sair...");
+            System.out.println("\n*** Categoria não encontrada! Pressione qualquer tecla para sair...");
             var sair = leitura.nextLine();
             System.exit(0);
         }
@@ -209,6 +214,55 @@ public class Principal2 {
         Produto produto = new Produto(nomeProduto, Double.valueOf(valorProduto), categoria, fornecedor);
         produtoRepository.saveAll(List.of(produto));
         //System.exit(0);
+    }
+
+    private void consultarNomefornecedor(String nomeFornecedor) {
+        Boolean saida = false;
+        while (!saida) {
+            Optional<Fornecedor> fornecedorConsultado = fornecedorRepository.findByNomeContainingIgnoreCase(nomeFornecedor);
+            if (fornecedorConsultado.isPresent()) {
+                saida = true;
+            } else {
+                System.out.println("Fornecedor não encontrado!");
+            }
+        }
+    }
+
+    private void cadastrarPedido() {
+        produtoRepository.findAll().forEach(p -> {
+            System.out.println("ID Produto: " + p.getId() +  " Nome Produto: " + p.getNome());
+        });
+
+        Boolean saida = false;
+        while (!saida) {
+            System.out.println("Informa o id do produto:");
+            var idProduto = leitura.nextLine();
+
+            Optional<Produto> idProdutoConsultado = produtoRepository.findById(Integer.valueOf(idProduto)) ;
+            if (idProdutoConsultado.isPresent()) {
+                Produto produto = new Produto();
+                produto.setId(Long.valueOf(idProduto));
+                Pedido pedido1 = new Pedido((Long.valueOf(idProduto)), LocalDate.now());
+                pedido1.setProdutos(List.of(produto));
+
+                pedidoRepository.saveAll(List.of(pedido1));
+
+                System.out.println("\nPedido cadastrado com sucesso");
+
+                saida = true;
+            } else {
+                System.out.println("Produto não encontrado!");
+            }
+        }
+    }
+
+    private void consultarPedidos() {
+        Produto produto = new Produto();
+        pedidoRepository.findAll().forEach(p -> {
+            var idProdutoConsultado = produtoRepository.findById(Integer.valueOf( p.getProdutos() )) ;
+            System.out.println("\nID Pedido: " + p.getId() + " Data: " + p.getData() +  " Id Produto: " + p.getProdutos().toString());
+        });
+
     }
 
 }
