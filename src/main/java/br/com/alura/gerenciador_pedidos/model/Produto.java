@@ -9,6 +9,7 @@ public class Produto {
     private Long id;
 
     private String nome;
+
     private Double preco;
 
     @ManyToOne
@@ -61,6 +62,15 @@ public class Produto {
         this.preco = preco;
         this.categoria = categoria;
         this.fornecedor = fornecedor;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", preco=" + preco +
+                '}';
     }
 
 //    public Produto(String nome, Double preco, Long id_categoria, Long id_fornecedor) {

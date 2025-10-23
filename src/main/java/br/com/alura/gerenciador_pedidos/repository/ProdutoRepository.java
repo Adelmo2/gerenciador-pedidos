@@ -5,9 +5,16 @@ import br.com.alura.gerenciador_pedidos.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     Optional<Produto> findById(Integer id);
+    List<Produto> findByNome(String nome);
+    List<Produto> findByCategoriaNome(String categoriaNome);
+
+    List<Produto> findByPrecoGreaterThan(double preco);
+
+    List<Produto> findByPrecoLessThan(double preco);
 }

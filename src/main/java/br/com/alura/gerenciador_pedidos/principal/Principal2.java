@@ -69,6 +69,19 @@ public class Principal2 {
             4 - Consultar ID do Fornecedor
             5 - Cadastrar Pedido
             6 - Consultar Pedidos
+            ---------------------
+            11 - Consultar produto por nome (exato)
+            12 - Consultar produtos associados a uma categoria específica
+            13 - Consulta produtos com preço maior que o valor fornecido.
+            14 - Consulta produtos com preço menor que o valor fornecido.
+            15 - Consulta produtos cujo nome contenha o termo especificado.
+            16 - Consulta pedidos que ainda não possuem uma data de entrega.
+            17 - Consulta pedidos com data de entrega preenchida.
+            18 - Consulta produtos de uma categoria ordenados pelo preço de forma crescente.
+            19 - Consulta produtos de uma categoria ordenados pelo preço de forma decrescente.
+            20 - Consulta a contagem de produtos em uma categoria específica.
+            21 - Consulta a contagem de produtos cujo preço seja maior que o valor fornecido.
+            21 - Consulta produtos com preço menor que o valor fornecido ou cujo nome contenha o termo especificado
             """;
 
             System.out.println(menu);
@@ -84,7 +97,7 @@ public class Principal2 {
                     break;
                 case 3:
                     cadastrarProduto();
-                    opcao = 0;
+                    //opcao = 0;
                     break;
                 case 4:
                     consultarIdfornecedor();
@@ -94,6 +107,24 @@ public class Principal2 {
                     break;
                 case 6:
                     consultarPedidos();
+                    break;
+                case 11:
+                    consultaPprodutosPeloNome();
+                    pausaTela();
+                    break;
+                case 12:
+                    consultaPprodutosPelCategoria();
+                    pausaTela();
+                    break;
+                case 13:
+                    produtosComPrecoMaiorQueValorFornecido();
+                    pausaTela();
+                    break;
+                case 14:
+                    produtosComPrecoMnorQueValorFornecido();
+                    break;
+                case 99:
+                    testeMetodo();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -257,12 +288,89 @@ public class Principal2 {
     }
 
     private void consultarPedidos() {
-        Produto produto = new Produto();
         pedidoRepository.findAll().forEach(p -> {
-            var idProdutoConsultado = produtoRepository.findById(Integer.valueOf( p.getProdutos() )) ;
             System.out.println("\nID Pedido: " + p.getId() + " Data: " + p.getData() +  " Id Produto: " + p.getProdutos().toString());
         });
+    }
 
+    //11 - Consultar produto por nome (exato)
+    private void consultaPprodutosPeloNome() {
+        System.out.println("Informa o nome do produto:");
+        var nomeProduto = leitura.nextLine();
+        var produto = produtoRepository.findByNome(nomeProduto);
+        System.out.println("\nProduto consultado (via toString): " + produto);
+        produto.forEach(System.out::println);
+
+        List<Produto> produtos = produtoRepository.findByNome(nomeProduto);
+        produtos.forEach(p ->
+                System.out.println("Lista da consulta do produto (via List<Produto> /  Stream): " + p.getNome() + " Preço: " + p.getPreco())
+        );
+    }
+
+    //12 - Consultar produtos associados a uma categoria específica
+    private void consultaPprodutosPelCategoria() {
+        System.out.println("Informa o nome da categoria");
+        var categoriaNome = leitura.nextLine();
+        var produtosPorCategoria = produtoRepository.findByCategoriaNome(categoriaNome);
+        System.out.println("\n Produto(s) da categoria: " + categoriaNome + " " +  produtosPorCategoria);
+        //produtosPorCategoria
+        produtosPorCategoria.forEach(System.out::println);
+        System.out.println("\n");
+    }
+
+    //13 - Consulta produtos com preço maior que o valor fornecido.
+    private void produtosComPrecoMaiorQueValorFornecido() {
+        System.out.println("Informe o preço do produto maior do que o valor  pesquisado: ");
+        var preco = leitura.nextDouble();
+        List<Produto> produtos =  produtoRepository.findByPrecoGreaterThan(preco);
+        System.out.println("\nProdutos com o preço maior que: " + preco  + ".");
+        produtos.forEach(p ->
+                        System.out.println("Nome Produto: " + p.getNome() + " Preço: " + p.getPreco())
+                );
+    }
+
+    //14 - Consulta produtos com preço menor que o valor fornecido.
+    private void produtosComPrecoMnorQueValorFornecido() {
+        System.out.println("Informe o preço do produto maior do que o valor  pesquisado: ");
+        var preco = leitura.nextDouble();
+        List<Produto> produtos =  produtoRepository.findByPrecoLessThan(preco);
+        System.out.println("\nProdutos com o preço menor que: " + preco  + ".");
+        produtos.forEach(p ->
+                System.out.println("Nome Produto: " + p.getNome() + " Preço: " + p.getPreco())
+        );
+
+        pausaTela();
+
+    }
+
+    // 99 - Utilizado somente para testes
+    //private void testeMetodo() {
+    private void testeMetodo2() {
+        System.out.println("Informa o nome do produto:");
+        var nomeProduto = leitura.nextLine();
+        var produto = produtoRepository.findByNome(nomeProduto);
+        System.out.println("\nProduto consultado (via toString): " + produto);
+        produto.forEach(System.out::println);
+
+        List<Produto> produtos = produtoRepository.findByNome(nomeProduto);
+        produtos.forEach(p ->
+                        System.out.println("Lista da consulta do produto (via List<Produto> /  Stream): " + p.getNome() + " Preço: " + p.getPreco())
+                );
+    }
+
+    private void pausaTela() {
+        System.out.println("\nPressione qualquer tecla para continuar...");
+        var sVar2 = leitura.nextLine();
+        var sVar = leitura.nextLine();
+    }
+
+    private void testeMetodo() {
+        for (int i = 0; i < 2; i++) {
+            i = 1;
+            System.out.println("\nPressione qualquer tecla para continuar...");
+            var sVar = leitura.nextLine();
+            i = 10;
+        }
     }
 
 }
