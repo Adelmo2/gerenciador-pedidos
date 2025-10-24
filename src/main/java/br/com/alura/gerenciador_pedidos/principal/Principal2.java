@@ -8,7 +8,6 @@ import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
 import br.com.alura.gerenciador_pedidos.repository.FornecedorRepository;
 import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
-import com.sun.jdi.IntegerValue;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -82,6 +81,7 @@ public class Principal2 {
             20 - Consulta a contagem de produtos em uma categoria específica.
             21 - Consulta a contagem de produtos cujo preço seja maior que o valor fornecido.
             21 - Consulta produtos com preço menor que o valor fornecido ou cujo nome contenha o termo especificado
+            99 - Teste de Método
             """;
 
             System.out.println(menu);
@@ -123,6 +123,21 @@ public class Principal2 {
                 case 14:
                     produtosComPrecoMnorQueValorFornecido();
                     break;
+                case 15:
+                    produtosComNomeContido();
+                    break;
+                case 16:
+                    consultaPedidosSemDataDeEntrega();
+                    break;
+                case 17:
+                    consultaPedidosComDataDeEntrega();
+                    break;
+                case 18:
+                    consultaProdutosDeUmaCategoriaOrdenadaPeloPreco();
+                    break;
+                case 19:
+                    consultaProdutosDeUmaCategoriaOrdenadaPeloPrecoDecrescente();
+                    break;
                 case 99:
                     testeMetodo();
                     break;
@@ -132,6 +147,21 @@ public class Principal2 {
                 default:
                     System.out.println("Opção inválida");
             }
+        }
+    }
+
+    private void pausaTela() {
+        System.out.println("\nPressione qualquer tecla para continuar...");
+        var sVar2 = leitura.nextLine();
+        var sVar = leitura.nextLine();
+    }
+
+    private void testeMetodo() {
+        for (int i = 0; i < 2; i++) {
+            i = 1;
+            System.out.println("\nPressione qualquer tecla para continuar...");
+            var sVar = leitura.nextLine();
+            i = 10;
         }
     }
 
@@ -338,39 +368,64 @@ public class Principal2 {
         produtos.forEach(p ->
                 System.out.println("Nome Produto: " + p.getNome() + " Preço: " + p.getPreco())
         );
-
         pausaTela();
-
     }
 
-    // 99 - Utilizado somente para testes
-    //private void testeMetodo() {
-    private void testeMetodo2() {
-        System.out.println("Informa o nome do produto:");
+    //15 - Consulta produtos cujo nome contenha o termo especificado.
+    private void produtosComNomeContido() {
+        System.out.println("Informa uma parte do nome contido no produto:");
         var nomeProduto = leitura.nextLine();
-        var produto = produtoRepository.findByNome(nomeProduto);
-        System.out.println("\nProduto consultado (via toString): " + produto);
-        produto.forEach(System.out::println);
 
-        List<Produto> produtos = produtoRepository.findByNome(nomeProduto);
+        List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCase(nomeProduto);
+
+        System.out.println("\nProdutos contidos no nome: " + produtos  + ".");
         produtos.forEach(p ->
-                        System.out.println("Lista da consulta do produto (via List<Produto> /  Stream): " + p.getNome() + " Preço: " + p.getPreco())
-                );
+                System.out.println("Nome Produto: " + p.getNome() + " Preço: " + p.getPreco())
+        );
+        pausaTela();
     }
 
-    private void pausaTela() {
-        System.out.println("\nPressione qualquer tecla para continuar...");
-        var sVar2 = leitura.nextLine();
-        var sVar = leitura.nextLine();
+    //16 - Consulta pedidos que ainda não possuem uma data de entrega.
+    private void consultaPedidosSemDataDeEntrega() {
+        List<Pedido> pedidos = pedidoRepository.findByDataEntregaIsNull();
+        System.out.println("\nPedidos sem data de entrega: ");
+        pedidos.forEach(p ->
+            System.out.println("Pedido: " + p.getId() + " Data Pedido: " + p.getData())
+        );
+        pausaTela();
     }
 
-    private void testeMetodo() {
-        for (int i = 0; i < 2; i++) {
-            i = 1;
-            System.out.println("\nPressione qualquer tecla para continuar...");
-            var sVar = leitura.nextLine();
-            i = 10;
-        }
+    //17 - Consulta pedidos com data de entrega preenchida.
+    private void consultaPedidosComDataDeEntrega() {
+        List<Pedido> pedidos = pedidoRepository.findByDataEntregaIsNotNull();
+        System.out.println("\nPedidos com data de entrega: ");
+        pedidos.forEach(p ->
+                System.out.println("Pedido: " + p.getId() + " Data Pedido: " + p.getData() + " Data de Entrega: " + p.getDataEntrega())
+        );
+        pausaTela();
     }
 
+    //18 - Consulta produtos de uma categoria ordenados pelo preço de forma crescente.
+    private void consultaProdutosDeUmaCategoriaOrdenadaPeloPreco() {
+        System.out.println("Informe o nome da categoria");
+        var categoriaNome = leitura.nextLine();
+        System.out.println("Produtos de uma categoria na ordem do preço:");
+        List<Produto> produtos = produtoRepository.findByCategoriaNomeOrderByPrecoAsc(categoriaNome);
+        produtos.forEach(p ->
+                System.out.println("Produto: " + p.getNome() + " Preço: " + p.getPreco())
+        );
+        pausaTela();
+    }
+
+    //19 - Consulta produtos de uma categoria ordenados pelo preço de forma decrescente.
+    private void consultaProdutosDeUmaCategoriaOrdenadaPeloPrecoDecrescente() {
+        System.out.println("Informe o nome da categoria");
+        var categoriaNome = leitura.nextLine();
+        System.out.println("Produtos de uma categoria na ordem do preço decrescente:");
+        List<Produto> produtos = produtoRepository.findByCategoriaNomeOrderByPrecoDesc(categoriaNome);
+        produtos.forEach(p ->
+                System.out.println("Produto: " + p.getNome() + " Preço: " + p.getPreco())
+        );
+        pausaTela();
+    }
 }

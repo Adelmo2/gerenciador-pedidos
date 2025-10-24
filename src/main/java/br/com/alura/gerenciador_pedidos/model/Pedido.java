@@ -22,6 +22,8 @@ public class Pedido {
 
     private LocalDate data;
 
+    private LocalDate dataEntrega;
+
     public Pedido() {}
 
     public Pedido(Long id, LocalDate data) {
@@ -44,6 +46,14 @@ public class Pedido {
     }
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
+    }
+
+    public LocalDate getDataEntrega() {
+        return dataEntrega;
+    }
+
+    public void setDataEntrega(LocalDate dataEntrega) {
+        this.dataEntrega = dataEntrega;
     }
 
     @Override
