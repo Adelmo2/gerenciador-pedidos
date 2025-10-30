@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,13 @@ public class Principal2 {
             20 - Consulta a contagem de produtos em uma categoria específica.
             21 - Consulta a contagem de produtos cujo preço seja maior que o valor fornecido.
             21 - Consulta produtos com preço menor que o valor fornecido ou cujo nome contenha o termo especificado
+            22 - Retorne produtos com preço menor que o valor fornecido ou cujo nome contenha o termo especificado.
+            23 - Retorne pedidos feitos após uma data específica.
+            24 - Retorne pedidos feitos antes de uma data específica.
+            25 - Retorne pedidos feitos em um intervalo de datas.
+            26 - Retorne os três produtos mais caros.
+            27 - Retorne os cinco produtos mais baratos de uma categoria.
+            
             99 - Teste de Método
             """;
 
@@ -138,6 +146,23 @@ public class Principal2 {
                 case 19:
                     consultaProdutosDeUmaCategoriaOrdenadaPeloPrecoDecrescente();
                     break;
+                case 20:
+                    consultaContagemProdutosEemUmaCategoria();
+                    break;
+                case 21:
+                    consultaContagemProdutosPprecoMaiorQueValorFornecido();
+                    break;
+                case 22:
+                    produtosComPrecoMenorQueValorOuNomeContido();
+                    break;
+                case 23:
+                    pedidosAposDataEspecífica();
+                    break;
+                case 26:
+                    listaDosTresProdutosNaisCaros();
+                    break;
+                case 27:
+                    listaDosCincoProdutosNaisBaratos();
                 case 99:
                     testeMetodo();
                     break;
@@ -428,4 +453,76 @@ public class Principal2 {
         );
         pausaTela();
     }
+
+    //20 - Consulta a contagem de produtos em uma categoria específica.
+    private void consultaContagemProdutosEemUmaCategoria() {
+        System.out.println("Informa o nome da categoria:");
+        var categoriaNome = leitura.nextLine();
+        var qtdProdutos = produtoRepository.countByCategoriaNome(categoriaNome);
+        System.out.println("\n Qtd. Produto(s) na categoria " + categoriaNome + ": " + qtdProdutos);
+        pausaTela();
+    }
+
+    //21 - Consulta a contagem de produtos cujo preço seja maior que o valor fornecido.
+    private void consultaContagemProdutosPprecoMaiorQueValorFornecido() {
+        System.out.println("Informa o preço para contagem  de produtos:");
+        var preco = leitura.nextDouble();
+        var qtdProdutos = produtoRepository.countByPrecoGreaterThan( Double.valueOf(preco));
+        System.out.println("\n Qtd. Produto(s) com preço maior que R$: " + preco + ": " + qtdProdutos);
+
+        pausaTela();
+    }
+
+    //22 - Retorne produtos com preço menor que o valor fornecido ou cujo nome contenha o termo especificado.
+    private void produtosComPrecoMenorQueValorOuNomeContido() {
+        System.out.println("\nInforma parte do nome do produto:");
+        var nomeProduto = leitura.nextLine();
+
+        System.out.println("\nInforma o preço do produto:");
+        var preco = leitura.nextDouble();
+        System.out.println("\nProdutos com preço inferior a " + preco  +  " ou produto contido em: " +  nomeProduto);
+        var produtos =  produtoRepository.findByPrecoLessThanOrNomeContaining(preco, nomeProduto);
+        produtos.forEach(p ->
+                System.out.println("Produto: " + p.getNome() + " | preço: "  + p.getPreco())
+        );
+        pausaTela();
+    }
+
+    //23 - Retorne pedidos feitos após uma data específica.
+    private void pedidosAposDataEspecífica() {
+        System.out.println("\nInforma a data  do pedido");
+        //var dataPedido = leitura.nextLine();
+        var dataPedido = leitura.nextLine();
+        LocalDate data = LocalDate.parse(dataPedido); //Date.valueOf(dataPedido).toLocalDate() ;
+        //var data = LocalDate.parse(dataPedido);
+        System.out.println("\nPedidos gerados após a data: "  + dataPedido + " Data convertida: " + data);
+        var pedidos = pedidoRepository.findByDataAfter(data);
+        //var pedidos = pedidoRepository.findByDataGreatherThan(Date.valueOf(dataPedido));
+        pedidos.forEach(p ->
+                       System.out.println("Pedido: " + p.getId() +  " data inclusão: " + p.getData())
+                );
+        pausaTela();
+    }
+
+    //26 - Retorne os três produtos mais caros.
+    private void listaDosTresProdutosNaisCaros() {
+        System.out.println("\n3 Produtos mais caros na ordem decrescente:");
+        var top3 = produtoRepository.findTop3ByOrderByPrecoDesc();
+            top3.forEach(p  ->
+                    System.out.println("Produto: " +  p.getNome() + " Preço: " +  p.getPreco())
+            );
+
+        pausaTela();
+    }
+
+    //27 - Retorne os cinco produtos mais baratos de uma categoria.
+    private void listaDosCincoProdutosNaisBaratos() {
+        System.out.println("\n3 Produtos mais baratos na ordem ecrescente:");
+        var top3 = produtoRepository.findTop3ByOrderByPrecoAsc();
+        top3.forEach(p  ->
+                System.out.println("Produto: " +  p.getNome() + " Preço: " +  p.getPreco())
+        );
+        pausaTela();
+    }
+
 }

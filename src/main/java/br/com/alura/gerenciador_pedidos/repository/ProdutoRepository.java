@@ -1,6 +1,5 @@
 package br.com.alura.gerenciador_pedidos.repository;
 
-import br.com.alura.gerenciador_pedidos.model.Fornecedor;
 import br.com.alura.gerenciador_pedidos.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,8 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+
     Optional<Produto> findById(Integer id);
+
     List<Produto> findByNome(String nome);
+
     List<Produto> findByCategoriaNome(String categoriaNome);
 
     List<Produto> findByPrecoGreaterThan(double preco);
@@ -24,4 +26,13 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     List<Produto> findByCategoriaNomeOrderByPrecoDesc(String categoriaNome);
 
+    long countByCategoriaNome(String categoriaNome);
+
+    int countByPrecoGreaterThan(double preco);
+
+    List<Produto> findByPrecoLessThanOrNomeContaining(Double preco, String termo);
+
+    List<Produto> findTop3ByOrderByPrecoDesc();
+
+    List<Produto> findTop3ByOrderByPrecoAsc();
 }
