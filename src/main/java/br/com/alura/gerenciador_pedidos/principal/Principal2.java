@@ -8,15 +8,16 @@ import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
 import br.com.alura.gerenciador_pedidos.repository.FornecedorRepository;
 import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
+import br.com.alura.gerenciador_pedidos.util.DataUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
+
+import static br.com.alura.gerenciador_pedidos.util.DataUtil.*;
+import static org.yaml.snakeyaml.tokens.Token.ID.Value;
 
 @Component
 public class Principal2 {
@@ -158,6 +159,12 @@ public class Principal2 {
                 case 23:
                     pedidosAposDataEspecífica();
                     break;
+                case 24:
+                    pedidosAntesDaDataEspecífica();
+                    break;
+                case 25:
+                    pedidosEntre2Datas();
+                    break;
                 case 26:
                     listaDosTresProdutosNaisCaros();
                     break;
@@ -179,15 +186,6 @@ public class Principal2 {
         System.out.println("\nPressione qualquer tecla para continuar...");
         var sVar2 = leitura.nextLine();
         var sVar = leitura.nextLine();
-    }
-
-    private void testeMetodo() {
-        for (int i = 0; i < 2; i++) {
-            i = 1;
-            System.out.println("\nPressione qualquer tecla para continuar...");
-            var sVar = leitura.nextLine();
-            i = 10;
-        }
     }
 
     private void cadastrarFornecedor() {
@@ -490,17 +488,46 @@ public class Principal2 {
 
     //23 - Retorne pedidos feitos após uma data específica.
     private void pedidosAposDataEspecífica() {
-        System.out.println("\nInforma a data  do pedido");
-        //var dataPedido = leitura.nextLine();
+        System.out.println("\nInforma a data do pedido (formato yyyy-mm-dd):");
         var dataPedido = leitura.nextLine();
         LocalDate data = LocalDate.parse(dataPedido); //Date.valueOf(dataPedido).toLocalDate() ;
-        //var data = LocalDate.parse(dataPedido);
         System.out.println("\nPedidos gerados após a data: "  + dataPedido + " Data convertida: " + data);
         var pedidos = pedidoRepository.findByDataAfter(data);
-        //var pedidos = pedidoRepository.findByDataGreatherThan(Date.valueOf(dataPedido));
         pedidos.forEach(p ->
                        System.out.println("Pedido: " + p.getId() +  " data inclusão: " + p.getData())
                 );
+        pausaTela();
+    }
+
+    //24 - Retorne pedidos feitos antes de uma data específica.
+    private void pedidosAntesDaDataEspecífica() {
+        System.out.println("\nInforma a data  do pedido (formato yyyy-mm-dd):");
+        var dataPedido = leitura.nextLine();
+        LocalDate data = LocalDate.parse(dataPedido); //Date.valueOf(dataPedido).toLocalDate() ;
+        System.out.println("\nPedidos gerados antes da data: "  + dataPedido + " Data convertida: " + data);
+        var pedidos = pedidoRepository.findByDataBefore(data);
+        pedidos.forEach(p ->
+                System.out.println("Pedido: " + p.getId() +  " data inclusão: " + p.getData())
+        );
+        pausaTela();
+    }
+
+    //25 - Retorne pedidos feitos em um intervalo de datas.
+    private void pedidosEntre2Datas() {
+        System.out.println("\nInforma a data inicio do pedido (formato yyyy-mm-dd):");
+        var dataPedidoIni = leitura.nextLine();
+
+        System.out.println("\nInforma a data final do pedido (formato yyyy-mm-dd):");
+        var dataPedidoFim = leitura.nextLine();
+
+        LocalDate dataIni = LocalDate.parse(dataPedidoIni);
+        LocalDate dataFim = LocalDate.parse(dataPedidoFim);
+
+        System.out.println("\nPedidos gerados na data de: "  + dataIni + " até: " + dataFim);
+        var pedidos = pedidoRepository.findByDataBetween(dataIni, dataFim);
+        pedidos.forEach(p ->
+                System.out.println("Pedido: " + p.getId() +  " data inclusão: " + p.getData())
+        );
         pausaTela();
     }
 
@@ -525,4 +552,32 @@ public class Principal2 {
         pausaTela();
     }
 
+    private void testeMetodo() {
+
+        Date dData = null;
+        //dData = DataUtil.getData("0001-01-01"); //  Value.o "25/12/2025";
+        dData = DataUtil.getData("2025-10-31T07:06:24"); //  Value.o "25/12/2025";
+
+        System.out.println("\nRetorno da variavel dData: " + dData);
+
+        //DataUtil dataUtil  = new DataUtil();
+        //Date data2 = new Date(); //= D  LocalDate.now();
+        //data2  =  Value.toString() ;
+        //String data5 = LocalDate.now();
+        //data2 =  data3;
+        var sData6  =  LocalDate.now();
+        //String sData = "0001-01-01";
+        //String.valueOf(LocalDate.now());
+        //var sData2 = DataUtil.getData(sData);
+        //DataUtil dData2 = getData(sData);
+        //System.out.println("Data Retornada: "  + dData2);
+        //var dDataSemHora = getDataSemHora(data2);
+        //2025-10-31T07:06:24
+        //String sDataHora =  getDataHora(dData, "T07:06:24"); // getDataHora(sData6);
+
+        //System.out.println("RetornoDataUtil.getDataHora(): " + sDataHora);
+
+        pausaTela();
+
+    }
 }
