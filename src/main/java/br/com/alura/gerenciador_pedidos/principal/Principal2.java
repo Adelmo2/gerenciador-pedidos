@@ -59,7 +59,7 @@ public class Principal2 {
     }
 
     @Transactional
-    public void CadastrarForncedor() {
+    public void CadastrosEConsultas() {
         var opcao = -1;
         while (opcao != 0) {
             var menu = """
