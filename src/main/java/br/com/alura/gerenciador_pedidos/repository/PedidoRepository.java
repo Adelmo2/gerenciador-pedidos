@@ -22,10 +22,8 @@ public interface PedidoRepository  extends JpaRepository<Pedido, Long> {
 
     List<Pedido>  findByDataBetween(LocalDate dataIni, LocalDate dataFim);
 
-
     //List<Pedido> pedidosCadastradosEntreDuasDatas(LocalDate dataIni, LocalDate dataFim);
-    @Query("SELECT p FROM Pedido WHERE p.data >= :dataIni AND p.data <= :dataFim")
-    default List<Pedido> pedidosCadastradosEntreDuasDatas(LocalDate dataIni, LocalDate dataFim) {
-        return null;
-    }
+    //@Query("SELECT p FROM Pedido p WHERE p.data >= :dataIni AND p.data <= :dataFim")
+    @Query("SELECT p FROM Pedido p WHERE p.data BETWEEN :dataIni AND :dataFim")
+    List<Pedido> pedidosCadastradosEntreDuasDatas(LocalDate dataIni, LocalDate dataFim); //{
 }

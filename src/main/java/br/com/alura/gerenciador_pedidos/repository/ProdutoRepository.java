@@ -48,7 +48,34 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> produtosOrdenadosPeloPrecoDecrescente();
 
     @Query("SELECT p FROM Produto p WHERE p.nome LIKE :letra%")
-    List<Produto> produtosQueComecemComUmaLetraEspecífica(String letra);
+    List<Produto> produtosQueIniciamComUmaLetraEspecífica(String letra);
+
+    @Query("SELECT AVG(p.preco) FROM Produto p")
+    Double mediaDePrecoPorProduto();
+
+    @Query("SELECT MAX(p.preco) FROM Produto p WHERE p.categoria.nome = :nomeCategoria")
+    Double precoMmaximoDeUmProdutoEmUmaCategoria(String nomeCategoria);
+
+    @Query("SELECT c.nome, COUNT(p) FROM Produto p JOIN p.categoria c GROUP BY c.nome")
+    List<Object[]> quantidadeDeProdutosPorCategoria();
+
+    @Query("SELECT c.nome, COUNT(p) FROM Produto p JOIN p.categoria c GROUP BY c.nome HAVING COUNT(p) > :qtdProdutos")
+    List<Object[]> categoriasComMaisDeXProdutos(int qtdProdutos);
+
+    //@Query("SELECT p.nome, c.nome FROM Produto p JOIN p.categoria c WHERE (p.nome = :nome OR c.nome = :nome)")
+    //List<Produto> produtosFiltradosPorNomeOuPorCategoria(String nome);
+    ///@Query("SELECT p.nome, c.nome, p.preco FROM Produto p JOIN p.categoria c WHERE (p.nome LIKE %:nome% OR c.nome LIKE %:nome%)")
+    @Query("SELECT ('Produto: ' || p.nome), (' Categoria: ' || c.nome), (' Preço: ' || p.preco) FROM Produto p JOIN p.categoria c WHERE (LOWER(p.nome) LIKE %:nome% OR LOWER(c.nome) LIKE %:nome%)")
+    List<Object[]> produtosFiltradosPorNomeOuPorCategoria(String nome);
+
+    @Query(value = "SELECT * FROM produto ORDER BY preco DESC LIMIT 5", nativeQuery = true)
+    List<Produto> cincoProdutosMaisCaros();
 }
-//Inicio para os repositorios a para o prinipal 3
-////Final para os repositorios a para o prinipal 3
+
+//Outras Indicações do instrutor.
+//@Query(value = "SELECT * FROM produto ORDER BY preco DESC LIMIT 5", nativeQuery = true)
+//List<Produto> buscarTop5ProdutosMaisCaros();
+
+//@Query("SELECT p FROM Produto p WHERE (:nome IS NULL OR p.nome = :nome) AND (:categoria IS NULL OR p.categoria.nome = :categoria)")
+//List<Produto> buscarProdutosFiltrados(@Param("nome") String nome, @Param("categoria") String categoria);
+

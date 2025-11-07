@@ -6,11 +6,13 @@ import br.com.alura.gerenciador_pedidos.repository.CategoriaRepository;
 import br.com.alura.gerenciador_pedidos.repository.FornecedorRepository;
 import br.com.alura.gerenciador_pedidos.repository.PedidoRepository;
 import br.com.alura.gerenciador_pedidos.repository.ProdutoRepository;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -68,7 +70,7 @@ public class Principal3 {
                     7  - Consulta que retorna o preço máximo de um produto em uma categoria
                     8  - Consulta para contar o número de produtos por categoria
                     9  - Consulta para filtrar categorias com mais de 10 produtos
-                    10 - Consulta para retornar os produtos filtrados por nome ou por categoria
+                    10 - Consulta para retornar os produtos/categoria filtrados por nome contido no produto e/ou categoria
                     11 - Consulta nativa para buscar os cinco produtos mais caros
                     99 - Teste de Método
                     """;
@@ -93,9 +95,26 @@ public class Principal3 {
                 case 5:
                     pedidosCadastradosEntreDuasDatas();
                     break;
-
+                case 6:
+                    mediaDePrecoPorProduto();
+                    break;
+                case 7:
+                    precoMmaximoDeUmProdutoEmUmaCategoria();
+                    break;
+                case 8:
+                    quantidadeDeProdutosPorCategoria();
+                    break;
+                case 9:
+                    categoriasComMaisDeXProdutos();
+                    break;
+                case 10:
+                    produtosFiltradosPorNomeOuPorCategoria();
+                    break;
+                case 11:
+                    cincoProdutosMaisCaros();
+                    break;
                 default:
-                    System.out.println("Opção inválida");
+                    System.out.println("Opção inválida...");
             }
         }
     }
@@ -137,7 +156,7 @@ public class Principal3 {
         System.out.println("Informa uma letra");
         var letra = leitura.nextLine();
         System.out.println("Produtos que iniciam o nome com a letra: " + letra);
-        List<Produto> produtos = produtoRepository.produtosQueComecemComUmaLetraEspecífica(letra);
+        List<Produto> produtos = produtoRepository.produtosQueIniciamComUmaLetraEspecífica(letra);
         produtos.forEach(System.out::println);
         pausaTela();
     }
@@ -159,7 +178,73 @@ public class Principal3 {
                 System.out.println("Pedido: " + p.getId() +  " data inclusão: " + p.getData())
         );
         pausaTela();
-
     }
 
+    //6  - Consulta que retorna a média de preços dos produtos
+    private void mediaDePrecoPorProduto() {
+        System.out.println("\nLista da Média de preços por produto:");
+        var mediaDePreco = produtoRepository.mediaDePrecoPorProduto();
+        System.out.println(mediaDePreco);
+        pausaTela();
+    }
+
+    //7  - Consulta que retorna o preço máximo de um produto em uma categoria
+    private void precoMmaximoDeUmProdutoEmUmaCategoria() {
+        System.out.println("\nInforme a categoria:");
+        var nomeCategoria = leitura.nextLine();
+        var precoMaximo = produtoRepository.precoMmaximoDeUmProdutoEmUmaCategoria(nomeCategoria);
+        System.out.println("\nPreço máximo em produtos da categoria: " + nomeCategoria + " é: " + precoMaximo);
+        pausaTela();
+    }
+
+    //8  - Consulta para contar o número de produtos por categoria
+    private void quantidadeDeProdutosPorCategoria() {
+
+        List<Object[]> produtos = produtoRepository.quantidadeDeProdutosPorCategoria();
+
+        int qtdLista = produtos.size();
+        for (int i = 0; i < qtdLista; i++) {
+            System.out.println("Qtd. de produto da categoria: " + Arrays.toString(produtos.get(i)));
+        }
+        pausaTela();
+        //produtos.forEach(System.out::println);
+        //pausaTela();
+    }
+
+    //9  - Consulta para filtrar categorias com mais de 10 produtos
+    private void categoriasComMaisDeXProdutos() {
+        System.out.println("Informe a quantidade de produtos por categoria:");
+        int qtdProdutos = leitura.nextInt();
+        List<Object[]> produtos = produtoRepository.categoriasComMaisDeXProdutos(qtdProdutos);
+
+        int qtdLista = produtos.size();
+        for (int i = 0; i < qtdLista; i++) {
+            System.out.println("Categoria com mais de " + qtdProdutos + " produtos: " + Arrays.toString(produtos.get(i)));
+        }
+        pausaTela();
+    }
+
+    //10 - Consulta para retornar os produtos filtrados por nome ou por categoria
+    private void produtosFiltradosPorNomeOuPorCategoria() {
+        System.out.println("\nInforme o nome do produto ou categoria");
+        var nome = leitura.nextLine();
+
+        List<Object[]> produtos = produtoRepository.produtosFiltradosPorNomeOuPorCategoria(nome.toLowerCase());
+
+        int qtdLista = produtos.size();
+        for (int i = 0; i < qtdLista; i++) {
+            System.out.println("Produtos e/ou Categorias filtradas no nome " + nome + " : " + Arrays.toString(produtos.get(i)));
+        }
+        pausaTela();
+    }
+
+    //11 - Consulta nativa para buscar os cinco produtos mais caros
+    private void cincoProdutosMaisCaros() {
+        List<Produto> produtos = produtoRepository.cincoProdutosMaisCaros();
+        System.out.println("\nLista dos 5 produtos mais caros.");
+        produtos.forEach(System.out::println);
+        pausaTela();
+    }
 }
+
+//List<Object[]> resultados = new ArrayList<>();
